@@ -1,0 +1,14 @@
+{
+  "manifest_version": 3,
+  "name": "Darija Translator Pro",
+  "version": "1.3",
+  "description": "Traducteur Anglais vers Darija Marocain moderne.",
+  "permissions": ["sidePanel", "scripting", "activeTab"],
+  "host_permissions": ["<all_urls>"],
+  "side_panel": {
+    "default_path": "sidepanel.html"
+  },
+  "action": {
+    "default_title": "Ouvrir le traducteur"
+  }
+}

@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Traducteur Darija Pro</title>
+    <style>
+        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background-color: #f4f4f9; display: flex; justify-content: center; align-items: center; height: 100vh; margin: 0; }
+        .card { background: white; padding: 30px; border-radius: 10px; box-shadow: 0 4px 15px rgba(0,0,0,0.1); width: 350px; text-align: center; }
+        h2 { color: #333; margin-bottom: 20px; }
+        input { width: 80%; padding: 12px; margin-bottom: 15px; border: 1px solid #ddd; border-radius: 5px; font-size: 16px; }
+        button { background-color: #28a745; color: white; border: none; padding: 12px 20px; border-radius: 5px; cursor: pointer; font-size: 16px; width: 100%; transition: background 0.3s; }
+        button:hover { background-color: #218838; }
+        #result-box { margin-top: 20px; padding: 15px; background-color: #e9ecef; border-radius: 5px; min-height: 40px; display: none; }
+        .darija-text { font-size: 22px; color: #0056b3; font-weight: bold; }
+        .error { color: #dc3545; }
+    </style>
+</head>
+<body>
+
+    <div class="card">
+        <h2>🇫🇷 ➡ 🇲🇦</h2>
+        <input type="text" id="wordInput" placeholder="Mot en français (ex: pain)...">
+        <button onclick="traduire()">Traduire</button>
+
+        <div id="result-box">
+            </div>
+    </div>
+
+    <script>
+        async function traduire() {
+            const word = document.getElementById("wordInput").value;
+            const resultBox = document.getElementById("result-box");
+            
+            // On vide la boite
+            resultBox.style.display = "block";
+            resultBox.innerHTML = "Chargement...";
+
+            try {
+                // Appel à l'API (Notez le chemin complet avec le nom du projet)
+                const response = await fetch("/darija-translator/api/translate?word=" + word);
+                
+                if (!response.ok) throw new Error("Erreur serveur");
+
+                const data = await response.json(); // On décode le JSON
+
+                if (data.success === "true") {
+                    resultBox.innerHTML = `
+                        <div style="font-size: 14px; color: #666;">Traduction :</div>
+                        <div class="darija-text">${data.translation}</div>
+                    `;
+                } else {
+                    resultBox.innerHTML = `<span class="error">${data.error}</span>`;
+                }
+
+            } catch (error) {
+                resultBox.innerHTML = `<span class="error">Erreur de connexion au serveur.</span>`;
+                console.error(error);
+            }
+        }
+    </script>
+
+</body>
+</html>
